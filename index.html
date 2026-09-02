@@ -79,9 +79,14 @@
       background-size: cover;
       background-position: center;
       opacity: .92;
-      transform: scale(1.04);
+      transform: scale(1.08);
       filter: brightness(.72) saturate(1.08) contrast(1.04);
       will-change: transform,opacity,filter,clip-path;
+      animation: cinematicDrift 20s ease-in-out infinite alternate;
+    }
+    @keyframes cinematicDrift {
+      0% { transform: scale(1.08) translate3d(-.8%,.4%,0); background-position: 48% 50%; }
+      100% { transform: scale(1.17) translate3d(1.1%,-.7%,0); background-position: 53% 48%; }
     }
     .star-field::before {
       content: "";
@@ -112,7 +117,7 @@
       background:
         linear-gradient(118deg,rgba(255,255,255,.10) 0%,transparent 21%,rgba(222,198,225,.06) 48%,transparent 72%,rgba(255,229,207,.07) 100%),
         radial-gradient(ellipse at 50% 110%,rgba(255,220,207,.16),transparent 48%);
-      box-shadow: inset 0 0 130px rgba(4,6,15,.45), inset 0 0 30px rgba(255,255,255,.035);
+      box-shadow: inset 0 0 190px rgba(0,2,10,.72), inset 0 0 50px rgba(255,255,255,.025);
       backdrop-filter: blur(.45px) saturate(1.12);
       mix-blend-mode: screen;
     }
@@ -140,29 +145,30 @@
     }
     @keyframes filmGrain { 0% { transform: translate(0,0); } 25% { transform: translate(2%,-1%); } 50% { transform: translate(-1%,2%); } 75% { transform: translate(1%,1%); } 100% { transform: translate(-2%,-1%); } }
     @keyframes glazeSweep { 0%,22% { left: -55%; opacity: 0; } 42% { opacity: 1; } 65%,100% { left: 115%; opacity: 0; } }
+    .cinema-bar { position: absolute; z-index: 4; left: 0; width: 100%; height: clamp(25px,6vh,66px); background: #03040a; pointer-events: none; box-shadow: 0 0 35px rgba(0,0,0,.48); }
+    .cinema-bar.top { top: 0; }
+    .cinema-bar.bottom { bottom: 0; }
     .intro-card {
       width: min(830px, 100%);
-      background: rgba(31,27,42,.62);
-      border: 1px solid rgba(255,255,255,.15);
-      border-radius: 34px;
-      padding: clamp(30px, 7vw, 72px);
-      box-shadow: 0 30px 90px rgba(68,49,60,.15);
+      background: transparent;
+      border: 0;
+      padding: 28px;
       text-align: center;
       position: relative;
       z-index: 1;
-      backdrop-filter: blur(16px);
       color: #fffaf7;
     }
-    .intro-card .eyebrow { color: #e9c8cf; }
-    .intro-mark { width: 62px; height: 62px; margin: 0 auto 23px; display: grid; place-items: center; border-radius: 20px; background: var(--rose); font-size: 1.7rem; transform: rotate(-4deg); }
-    .intro-card h1 { max-width: 690px; margin-inline: auto; }
-    .intro-copy { max-width: 610px; margin: 20px auto 0; color: rgba(255,250,247,.7); font-size: clamp(1rem, 2vw, 1.14rem); line-height: 1.65; }
-    .intro-points { display: flex; flex-wrap: wrap; justify-content: center; gap: 9px; margin: 28px 0; }
-    .intro-points span { border: 1px solid rgba(255,255,255,.13); background: rgba(255,255,255,.07); padding: 9px 13px; border-radius: 999px; color: rgba(255,250,247,.82); font-size: .86rem; font-weight: 750; }
-    .droplet-stage { position: relative; width: 210px; height: 82px; margin: 0 auto; display: grid; place-items: center; }
-    .enter-button { position: relative; z-index: 3; border: 0; color: white; background: linear-gradient(145deg,#8d7181,#4f424a); border-radius: 58% 42% 54% 46% / 56% 50% 50% 44%; padding: 15px 25px; font-weight: 850; cursor: pointer; box-shadow: 0 15px 28px rgba(52,45,50,.24), inset 5px 6px 12px rgba(255,255,255,.13); transition: transform .2s ease, box-shadow .2s ease; }
-    .enter-button::before { content: ""; position: absolute; width: 22px; height: 10px; border-radius: 50%; top: 7px; left: 24px; background: rgba(255,255,255,.22); transform: rotate(-18deg); }
-    .enter-button:hover { transform: translateY(-3px) scale(1.025); box-shadow: 0 19px 33px rgba(52,45,50,.27), inset 5px 6px 12px rgba(255,255,255,.13); }
+    .intro-title { min-height: 1.25em; max-width: 760px; margin: 0 auto 32px; color: white; font-size: clamp(2.6rem,8vw,6.2rem); text-shadow: 0 4px 34px rgba(0,0,0,.8),0 0 70px rgba(198,202,255,.15); letter-spacing: -.045em; }
+    .type-cursor { display: inline-block; width: 3px; height: .82em; margin-left: 8px; vertical-align: -.02em; border-radius: 3px; background: rgba(255,255,255,.9); animation: cursorBlink .8s steps(1) infinite; }
+    @keyframes cursorBlink { 0%,48% { opacity: 1; } 49%,100% { opacity: 0; } }
+    .droplet-stage { position: relative; width: 190px; height: 190px; margin: 0 auto; display: grid; place-items: center; opacity: 0; transform: translateY(12px); transition: opacity .7s ease,transform .7s ease; }
+    .intro-card.intro-ready .droplet-stage { opacity: 1; transform: translateY(0); }
+    .enter-button { position: relative; z-index: 3; width: 134px; height: 134px; overflow: hidden; border: 1px solid rgba(225,204,255,.35); color: white; background: radial-gradient(circle at 33% 27%,#c49cff 0%,#8c52c7 22%,#55236f 58%,#21102f 88%); border-radius: 50%; padding: 0; cursor: pointer; box-shadow: 0 0 18px rgba(176,104,255,.72),0 0 52px rgba(112,54,174,.48),inset -18px -20px 29px rgba(12,4,24,.7),inset 8px 7px 15px rgba(255,255,255,.18); transition: transform .25s ease,box-shadow .25s ease; }
+    .enter-button::before { content: ""; position: absolute; z-index: 2; width: 42px; height: 18px; border-radius: 50%; top: 17px; left: 20px; background: rgba(255,255,255,.18); filter: blur(5px); transform: rotate(-22deg); }
+    .enter-button::after { content: ""; position: absolute; z-index: 1; inset: -18%; border-radius: 45%; opacity: .64; background: repeating-radial-gradient(ellipse at 42% 47%,rgba(233,203,255,.20) 0 3px,rgba(80,27,107,.22) 4px 9px,transparent 10px 17px),linear-gradient(105deg,transparent 20%,rgba(235,203,255,.17) 44%,transparent 69%); mix-blend-mode: screen; animation: planetSurface 10s linear infinite; }
+    .enter-button span { position: relative; z-index: 4; display: block; width: 88px; margin: 0 auto; font-size: .7rem; line-height: 1.25; font-weight: 780; letter-spacing: .11em; text-transform: uppercase; text-shadow: 0 2px 8px rgba(13,4,25,.9); }
+    .enter-button:hover { transform: translateY(-4px) scale(1.055); box-shadow: 0 0 25px rgba(196,132,255,.9),0 0 72px rgba(126,67,188,.62),inset -18px -20px 29px rgba(12,4,24,.7),inset 8px 7px 15px rgba(255,255,255,.2); }
+    @keyframes planetSurface { from { transform: rotate(0deg) scale(1.08); } to { transform: rotate(360deg) scale(1.08); } }
     .enter-button.splashing { animation: dropletPress .7s cubic-bezier(.2,.8,.2,1) forwards; pointer-events: none; }
     .water-ring { position: absolute; z-index: 1; width: 82px; height: 34px; border: 2px solid rgba(166,101,118,.48); border-radius: 50%; opacity: 0; pointer-events: none; }
     .water-ring.animate { animation: waterRipple .7s ease-out forwards; }
@@ -176,12 +182,13 @@
     }
     @keyframes waterRipple { 0% { opacity: .75; transform: scale(.5); } 100% { opacity: 0; transform: scale(3.2); } }
     @keyframes dropletBurst { 0% { opacity: .85; transform: translate(0,0) scale(1); } 100% { opacity: 0; transform: translate(var(--dx),var(--dy)) scale(.2); } }
-    .intro-small { margin: 16px 0 0; color: rgba(255,250,247,.46); font-size: .78rem; }
     .page-hidden { display: none !important; }
     .intro-screen.leaving { animation: starPageFade 1.18s cubic-bezier(.65,0,.35,1) forwards; }
     .intro-screen.leaving .intro-card { animation: cardDissolve .72s ease forwards; }
     .intro-screen.leaving .star { animation: starSwirl 1.02s cubic-bezier(.55,.08,.25,1) var(--swirl-delay) forwards; transform-origin: var(--origin-x) var(--origin-y); }
     .intro-screen.leaving .star-photo { animation: photoVortex 1.12s cubic-bezier(.62,.04,.35,1) forwards; }
+    .intro-screen.leaving .cinema-bar.top { animation: barExitTop .68s ease-in forwards; }
+    .intro-screen.leaving .cinema-bar.bottom { animation: barExitBottom .68s ease-in forwards; }
     .intro-screen.leaving .star-field::before { animation: galaxySwirl 1.08s cubic-bezier(.55,.08,.25,1) forwards; }
     .intro-screen.leaving .film-glaze { animation: glazeVortex 1.05s ease-in forwards; }
     .planner-arriving { animation: plannerArrive 1.12s cubic-bezier(.22,.7,.25,1) both; }
@@ -198,6 +205,8 @@
       78% { opacity: .35; transform: rotate(-24deg) scale(.48); filter: brightness(.6) saturate(1.28) blur(10px); clip-path: circle(31% at 50% 50%); }
       100% { opacity: 0; transform: rotate(-58deg) scale(.08); filter: brightness(.45) saturate(1.35) blur(30px); clip-path: circle(3% at 50% 50%); }
     }
+    @keyframes barExitTop { to { transform: translateY(-105%); } }
+    @keyframes barExitBottom { to { transform: translateY(105%); } }
     @keyframes glazeVortex { 45% { opacity: .65; transform: rotate(5deg) scale(1.03); } 100% { opacity: 0; transform: rotate(22deg) scale(.35); filter: blur(20px); } }
     @keyframes cardDissolve { to { opacity: 0; transform: scale(1.035); filter: blur(12px); } }
     @keyframes starPageFade { 0%,35% { opacity: 1; } 100% { opacity: 0; visibility: hidden; } }
@@ -330,20 +339,15 @@
     <div class="star-photo" aria-hidden="true"></div>
     <div class="star-field" id="starField" aria-hidden="true"><span class="shooting-star"></span></div>
     <div class="film-glaze" aria-hidden="true"></div>
-    <div class="intro-card">
-      <div class="intro-mark" aria-hidden="true">✦</div>
-      <p class="eyebrow">Welcome to your semester flow</p>
-      <h1 id="introTitle">A calmer way to move through your week.</h1>
-      <p class="intro-copy">This personal planner brings classes, evening study time, self-care, and paralegal progress into one gentle rhythm—so you can stay organized without feeling like school has taken over your entire life.</p>
-      <div class="intro-points" aria-label="Planner highlights">
-        <span>☕ Slow mornings</span><span>🌙 Evening focus</span><span>⚖️ One module a week</span><span>🌿 Time to breathe</span>
-      </div>
+    <div class="cinema-bar top" aria-hidden="true"></div>
+    <div class="cinema-bar bottom" aria-hidden="true"></div>
+    <div class="intro-card" id="introCard">
+      <h1 class="intro-title" id="introTitle" aria-label="Welcome, AK"><span id="typedWelcome"></span><span class="type-cursor" aria-hidden="true"></span></h1>
       <div class="droplet-stage" id="dropletStage">
         <span class="water-ring" aria-hidden="true"></span>
         <span class="water-ring second" aria-hidden="true"></span>
-        <button class="enter-button" id="enterPlanner">Enter my planner →</button>
+        <button class="enter-button" id="enterPlanner"><span>View my schedule</span></button>
       </div>
-      <p class="intro-small">Your checkmarks and progress stay private in this browser.</p>
     </div>
   </section>
 
@@ -583,6 +587,25 @@
     const introScreen=document.getElementById('introScreen');
     const plannerPage=document.getElementById('plannerPage');
     const starField=document.getElementById('starField');
+    const introCard=document.getElementById('introCard');
+    const typedWelcome=document.getElementById('typedWelcome');
+    let typingTimer;
+    function typeIntroduction(){
+      clearTimeout(typingTimer);
+      const message='Welcome, AK';
+      let index=0;
+      typedWelcome.textContent='';
+      introCard.classList.remove('intro-ready');
+      function typeNext(){
+        typedWelcome.textContent=message.slice(0,index++);
+        if(index<=message.length){
+          typingTimer=setTimeout(typeNext,105+Math.random()*55);
+        }else{
+          typingTimer=setTimeout(()=>introCard.classList.add('intro-ready'),260);
+        }
+      }
+      typingTimer=setTimeout(typeNext,420);
+    }
     for(let i=0;i<210;i++){
       const star=document.createElement('span');
       const x=Math.random()*100;
@@ -612,6 +635,7 @@
       star.style.setProperty('--swirl-delay',`${Math.random()*.14}s`);
       starField.appendChild(star);
     }
+    typeIntroduction();
     document.getElementById('enterPlanner').onclick=e=>{
       const button=e.currentTarget;
       const stage=document.getElementById('dropletStage');
@@ -642,6 +666,7 @@
     document.getElementById('showIntro').onclick=()=>{
       plannerPage.classList.add('page-hidden');
       introScreen.classList.remove('page-hidden');
+      typeIntroduction();
       window.scrollTo({top:0,behavior:'smooth'});
     };
     document.getElementById('todayLabel').textContent = new Intl.DateTimeFormat('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'}).format(now);
