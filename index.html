@@ -41,8 +41,171 @@
     .eyebrow { margin: 0 0 6px; color: var(--rose-deep); font-size: .78rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
     h1 { margin: 0; font-family: Georgia, serif; font-size: clamp(2rem, 5vw, 3.6rem); font-weight: 500; line-height: 1; letter-spacing: -.04em; }
     #todayLabel { margin: 10px 0 0; color: var(--muted); }
-    .reset-button { border: 1px solid var(--line); background: rgba(255,255,255,.55); border-radius: 999px; padding: 10px 14px; cursor: pointer; }
+    .top-actions { display: flex; gap: 8px; }
+    .reset-button, .home-button { border: 1px solid var(--line); background: rgba(255,255,255,.55); border-radius: 999px; padding: 10px 14px; cursor: pointer; }
     .reset-button:hover { background: white; }
+    .home-button:hover { background: white; }
+
+    .intro-screen {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 28px;
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 50% 115%, rgba(166,101,118,.56), transparent 36%),
+        radial-gradient(circle at 15% 20%, rgba(111,90,104,.42), transparent 28%),
+        linear-gradient(155deg,#0d101d 0%,#171525 52%,#251b2b 100%);
+    }
+    .intro-screen::before, .intro-screen::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(2px);
+      pointer-events: none;
+    }
+    .intro-screen::before { width: 430px; height: 430px; background: rgba(151,113,148,.18); left: -170px; top: -150px; }
+    .intro-screen::after { width: 380px; height: 380px; background: rgba(99,125,151,.16); right: -150px; bottom: -140px; }
+    .star-field { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+    .star-photo {
+      position: absolute;
+      inset: -3%;
+      z-index: 0;
+      pointer-events: none;
+      background-image: url('night-sky-1080p.jpg');
+      background-size: cover;
+      background-position: center;
+      opacity: .92;
+      transform: scale(1.04);
+      filter: brightness(.72) saturate(1.08) contrast(1.04);
+      will-change: transform,opacity,filter,clip-path;
+    }
+    .star-field::before {
+      content: "";
+      position: absolute;
+      width: 145%;
+      height: 34%;
+      left: -22%;
+      top: 29%;
+      transform: rotate(-23deg);
+      background: radial-gradient(ellipse at center,rgba(209,211,232,.105),rgba(124,115,157,.045) 42%,transparent 72%);
+      filter: blur(18px);
+      opacity: .8;
+    }
+    .star { position: absolute; width: var(--size); height: var(--size); left: var(--x); top: var(--y); border-radius: 50%; background: var(--color,#fff); opacity: var(--opacity); box-shadow: 0 0 calc(var(--size) * 2.5) var(--glow,rgba(255,244,232,.75)); animation: twinkle var(--speed) ease-in-out var(--delay) infinite alternate; }
+    .star.bright { box-shadow: 0 0 5px 1px var(--glow),0 0 13px 2px var(--glow); }
+    .star.bright::before, .star.bright::after { content: ""; position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); border-radius: 999px; background: linear-gradient(90deg,transparent,var(--color),transparent); opacity: .78; }
+    .star.bright::before { width: calc(var(--size) * 7); height: 1px; }
+    .star.bright::after { width: 1px; height: calc(var(--size) * 8); background: linear-gradient(180deg,transparent,var(--color),transparent); }
+    .shooting-star { position: absolute; top: 18%; left: -15%; width: 90px; height: 1px; opacity: 0; transform: rotate(-18deg); background: linear-gradient(90deg,transparent,rgba(255,255,255,.9)); animation: shoot 8s ease-in 2.7s infinite; }
+    @keyframes twinkle { from { transform: scale(.88); opacity: calc(var(--opacity) * .62); } to { transform: scale(1.14); opacity: var(--opacity); } }
+    @keyframes shoot { 0%,72% { opacity: 0; transform: translate(0,0) rotate(-18deg); } 74% { opacity: .9; } 80%,100% { opacity: 0; transform: translate(125vw,38vh) rotate(-18deg); } }
+    .film-glaze {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+      background:
+        linear-gradient(118deg,rgba(255,255,255,.10) 0%,transparent 21%,rgba(222,198,225,.06) 48%,transparent 72%,rgba(255,229,207,.07) 100%),
+        radial-gradient(ellipse at 50% 110%,rgba(255,220,207,.16),transparent 48%);
+      box-shadow: inset 0 0 130px rgba(4,6,15,.45), inset 0 0 30px rgba(255,255,255,.035);
+      backdrop-filter: blur(.45px) saturate(1.12);
+      mix-blend-mode: screen;
+    }
+    .film-glaze::before {
+      content: "";
+      position: absolute;
+      inset: -30%;
+      opacity: .32;
+      background:
+        repeating-radial-gradient(circle at 30% 40%,rgba(255,255,255,.12) 0 1px,transparent 1px 4px),
+        repeating-linear-gradient(0deg,rgba(255,255,255,.026) 0 1px,transparent 1px 3px);
+      background-size: 7px 7px,100% 3px;
+      animation: filmGrain .28s steps(2) infinite;
+    }
+    .film-glaze::after {
+      content: "";
+      position: absolute;
+      width: 42%;
+      height: 160%;
+      top: -30%;
+      left: -55%;
+      transform: rotate(15deg);
+      background: linear-gradient(90deg,transparent,rgba(255,255,255,.055),transparent);
+      animation: glazeSweep 10s ease-in-out infinite;
+    }
+    @keyframes filmGrain { 0% { transform: translate(0,0); } 25% { transform: translate(2%,-1%); } 50% { transform: translate(-1%,2%); } 75% { transform: translate(1%,1%); } 100% { transform: translate(-2%,-1%); } }
+    @keyframes glazeSweep { 0%,22% { left: -55%; opacity: 0; } 42% { opacity: 1; } 65%,100% { left: 115%; opacity: 0; } }
+    .intro-card {
+      width: min(830px, 100%);
+      background: rgba(31,27,42,.62);
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: 34px;
+      padding: clamp(30px, 7vw, 72px);
+      box-shadow: 0 30px 90px rgba(68,49,60,.15);
+      text-align: center;
+      position: relative;
+      z-index: 1;
+      backdrop-filter: blur(16px);
+      color: #fffaf7;
+    }
+    .intro-card .eyebrow { color: #e9c8cf; }
+    .intro-mark { width: 62px; height: 62px; margin: 0 auto 23px; display: grid; place-items: center; border-radius: 20px; background: var(--rose); font-size: 1.7rem; transform: rotate(-4deg); }
+    .intro-card h1 { max-width: 690px; margin-inline: auto; }
+    .intro-copy { max-width: 610px; margin: 20px auto 0; color: rgba(255,250,247,.7); font-size: clamp(1rem, 2vw, 1.14rem); line-height: 1.65; }
+    .intro-points { display: flex; flex-wrap: wrap; justify-content: center; gap: 9px; margin: 28px 0; }
+    .intro-points span { border: 1px solid rgba(255,255,255,.13); background: rgba(255,255,255,.07); padding: 9px 13px; border-radius: 999px; color: rgba(255,250,247,.82); font-size: .86rem; font-weight: 750; }
+    .droplet-stage { position: relative; width: 210px; height: 82px; margin: 0 auto; display: grid; place-items: center; }
+    .enter-button { position: relative; z-index: 3; border: 0; color: white; background: linear-gradient(145deg,#8d7181,#4f424a); border-radius: 58% 42% 54% 46% / 56% 50% 50% 44%; padding: 15px 25px; font-weight: 850; cursor: pointer; box-shadow: 0 15px 28px rgba(52,45,50,.24), inset 5px 6px 12px rgba(255,255,255,.13); transition: transform .2s ease, box-shadow .2s ease; }
+    .enter-button::before { content: ""; position: absolute; width: 22px; height: 10px; border-radius: 50%; top: 7px; left: 24px; background: rgba(255,255,255,.22); transform: rotate(-18deg); }
+    .enter-button:hover { transform: translateY(-3px) scale(1.025); box-shadow: 0 19px 33px rgba(52,45,50,.27), inset 5px 6px 12px rgba(255,255,255,.13); }
+    .enter-button.splashing { animation: dropletPress .7s cubic-bezier(.2,.8,.2,1) forwards; pointer-events: none; }
+    .water-ring { position: absolute; z-index: 1; width: 82px; height: 34px; border: 2px solid rgba(166,101,118,.48); border-radius: 50%; opacity: 0; pointer-events: none; }
+    .water-ring.animate { animation: waterRipple .7s ease-out forwards; }
+    .water-ring.second { animation-delay: .12s; }
+    .drop-particle { position: absolute; z-index: 2; width: 9px; height: 12px; border-radius: 60% 40% 55% 45%; background: var(--rose-deep); pointer-events: none; left: calc(50% - 4px); top: calc(50% - 6px); animation: dropletBurst .65s cubic-bezier(.2,.8,.3,1) forwards; }
+    @keyframes dropletPress {
+      0% { transform: scale(1); border-radius: 58% 42% 54% 46% / 56% 50% 50% 44%; }
+      30% { transform: scaleX(1.14) scaleY(.72) translateY(9px); border-radius: 50%; }
+      62% { transform: scaleX(.88) scaleY(1.18) translateY(-5px); }
+      100% { transform: scale(0); opacity: 0; }
+    }
+    @keyframes waterRipple { 0% { opacity: .75; transform: scale(.5); } 100% { opacity: 0; transform: scale(3.2); } }
+    @keyframes dropletBurst { 0% { opacity: .85; transform: translate(0,0) scale(1); } 100% { opacity: 0; transform: translate(var(--dx),var(--dy)) scale(.2); } }
+    .intro-small { margin: 16px 0 0; color: rgba(255,250,247,.46); font-size: .78rem; }
+    .page-hidden { display: none !important; }
+    .intro-screen.leaving { animation: starPageFade 1.18s cubic-bezier(.65,0,.35,1) forwards; }
+    .intro-screen.leaving .intro-card { animation: cardDissolve .72s ease forwards; }
+    .intro-screen.leaving .star { animation: starSwirl 1.02s cubic-bezier(.55,.08,.25,1) var(--swirl-delay) forwards; transform-origin: var(--origin-x) var(--origin-y); }
+    .intro-screen.leaving .star-photo { animation: photoVortex 1.12s cubic-bezier(.62,.04,.35,1) forwards; }
+    .intro-screen.leaving .star-field::before { animation: galaxySwirl 1.08s cubic-bezier(.55,.08,.25,1) forwards; }
+    .intro-screen.leaving .film-glaze { animation: glazeVortex 1.05s ease-in forwards; }
+    .planner-arriving { animation: plannerArrive 1.12s cubic-bezier(.22,.7,.25,1) both; }
+    @keyframes starSwirl {
+      0% { opacity: var(--opacity); transform: rotate(0deg) scale(1); filter: blur(0); }
+      48% { opacity: .9; transform: rotate(var(--spin-mid)) scale(.76); filter: blur(.2px); }
+      82% { opacity: .42; transform: rotate(var(--spin-end)) scale(.24); filter: blur(1.2px); }
+      100% { opacity: 0; transform: rotate(var(--spin-final)) scale(.02); filter: blur(3px); }
+    }
+    @keyframes galaxySwirl { to { opacity: 0; transform: rotate(42deg) scale(.18); filter: blur(36px); } }
+    @keyframes photoVortex {
+      0% { opacity: .92; transform: rotate(0deg) scale(1.04); filter: brightness(.72) saturate(1.08) blur(0); clip-path: circle(78% at 50% 50%); }
+      46% { opacity: .76; transform: rotate(-5deg) scale(.9); filter: brightness(.7) saturate(1.18) blur(1px); clip-path: circle(67% at 50% 50%); }
+      78% { opacity: .35; transform: rotate(-24deg) scale(.48); filter: brightness(.6) saturate(1.28) blur(10px); clip-path: circle(31% at 50% 50%); }
+      100% { opacity: 0; transform: rotate(-58deg) scale(.08); filter: brightness(.45) saturate(1.35) blur(30px); clip-path: circle(3% at 50% 50%); }
+    }
+    @keyframes glazeVortex { 45% { opacity: .65; transform: rotate(5deg) scale(1.03); } 100% { opacity: 0; transform: rotate(22deg) scale(.35); filter: blur(20px); } }
+    @keyframes cardDissolve { to { opacity: 0; transform: scale(1.035); filter: blur(12px); } }
+    @keyframes starPageFade { 0%,35% { opacity: 1; } 100% { opacity: 0; visibility: hidden; } }
+    @keyframes plannerArrive { from { opacity: 0; transform: scale(.985) translateY(18px); filter: blur(7px); } to { opacity: 1; transform: none; filter: none; } }
+
+    @media (prefers-reduced-motion: reduce) {
+      .enter-button, .water-ring, .drop-particle { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+    }
 
     .hero-grid { display: grid; grid-template-columns: 1.8fr 1fr 1fr; gap: 14px; margin-bottom: 18px; }
     .summary-card { min-height: 145px; padding: 22px; border: 1px solid rgba(255,255,255,.65); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; position: relative; }
@@ -142,8 +305,9 @@
     @media (max-width: 560px) {
       .app { width: min(100% - 18px, 1180px); padding-top: 18px; }
       .topbar { align-items: center; }
-      .reset-button { font-size: 0; width: 42px; height: 42px; padding: 0; }
+      .reset-button, .home-button { font-size: 0; width: 42px; height: 42px; padding: 0; }
       .reset-button::after { content: "↻"; font-size: 1.2rem; }
+      .home-button::after { content: "⌂"; font-size: 1.2rem; }
       .hero-grid { gap: 9px; }
       .summary-card { min-height: 132px; padding: 17px; }
       .big-number { font-size: 1.8rem; }
@@ -162,14 +326,38 @@
   </style>
 </head>
 <body>
-  <main class="app">
+  <section class="intro-screen" id="introScreen" aria-labelledby="introTitle">
+    <div class="star-photo" aria-hidden="true"></div>
+    <div class="star-field" id="starField" aria-hidden="true"><span class="shooting-star"></span></div>
+    <div class="film-glaze" aria-hidden="true"></div>
+    <div class="intro-card">
+      <div class="intro-mark" aria-hidden="true">✦</div>
+      <p class="eyebrow">Welcome to your semester flow</p>
+      <h1 id="introTitle">A calmer way to move through your week.</h1>
+      <p class="intro-copy">This personal planner brings classes, evening study time, self-care, and paralegal progress into one gentle rhythm—so you can stay organized without feeling like school has taken over your entire life.</p>
+      <div class="intro-points" aria-label="Planner highlights">
+        <span>☕ Slow mornings</span><span>🌙 Evening focus</span><span>⚖️ One module a week</span><span>🌿 Time to breathe</span>
+      </div>
+      <div class="droplet-stage" id="dropletStage">
+        <span class="water-ring" aria-hidden="true"></span>
+        <span class="water-ring second" aria-hidden="true"></span>
+        <button class="enter-button" id="enterPlanner">Enter my planner →</button>
+      </div>
+      <p class="intro-small">Your checkmarks and progress stay private in this browser.</p>
+    </div>
+  </section>
+
+  <main class="app page-hidden" id="plannerPage">
     <header class="topbar">
       <div>
         <p class="eyebrow">Fall semester planner</p>
-        <h1>Arishma's Semester Flow</h1>
+        <h1>AK's Semester Flow</h1>
         <p id="todayLabel"></p>
       </div>
-      <button class="reset-button" id="resetWeek" title="Clear this week's checkmarks">Reset week</button>
+      <div class="top-actions">
+        <button class="home-button" id="showIntro" title="Return to introduction">Introduction</button>
+        <button class="reset-button" id="resetWeek" title="Clear this week's checkmarks">Reset week</button>
+      </div>
     </header>
 
     <section class="hero-grid" aria-label="Weekly overview">
@@ -304,7 +492,7 @@
       }
     };
 
-    const key = 'arishma-semester-flow-v1';
+    const key = 'ak-semester-flow-v1';
     const stored = JSON.parse(localStorage.getItem(key) || '{}');
     const state = {
       completed: stored.completed || {}, custom: stored.custom || [], modules: stored.modules || {},
@@ -392,6 +580,70 @@
     function esc(s) { const d=document.createElement('div');d.textContent=s;return d.innerHTML; }
 
     const now = new Date();
+    const introScreen=document.getElementById('introScreen');
+    const plannerPage=document.getElementById('plannerPage');
+    const starField=document.getElementById('starField');
+    for(let i=0;i<210;i++){
+      const star=document.createElement('span');
+      const x=Math.random()*100;
+      const clustered=i<78;
+      const bandY=72-(x*.52)+(Math.random()-.5)*25;
+      const y=clustered?Math.max(3,Math.min(97,bandY)):Math.random()*100;
+      const rarity=Math.pow(Math.random(),3.2);
+      const size=.42+rarity*3.2;
+      const bright=size>2.35 || i%61===0;
+      const temperature=Math.random();
+      const color=temperature<.16?'#c9dcff':temperature>.88?'#ffe2ad':'#fffaf1';
+      const glow=temperature<.16?'rgba(151,190,255,.88)':temperature>.88?'rgba(255,194,117,.82)':'rgba(255,245,221,.88)';
+      star.className=`star${bright?' bright':''}`;
+      star.style.setProperty('--x',`${x}%`);
+      star.style.setProperty('--y',`${y}%`);
+      star.style.setProperty('--size',`${size}px`);
+      star.style.setProperty('--opacity',`${bright?Math.random()*.16+.84:Math.random()*.58+.27}`);
+      star.style.setProperty('--speed',`${bright?Math.random()*1.7+2.2:Math.random()*4+3}s`);
+      star.style.setProperty('--delay',`${Math.random()*-5}s`);
+      star.style.setProperty('--color',color);
+      star.style.setProperty('--glow',glow);
+      star.style.setProperty('--origin-x',`${50-x}vw`);
+      star.style.setProperty('--origin-y',`${50-y}vh`);
+      star.style.setProperty('--spin-mid',`${48+Math.random()*34}deg`);
+      star.style.setProperty('--spin-end',`${118+Math.random()*42}deg`);
+      star.style.setProperty('--spin-final',`${190+Math.random()*65}deg`);
+      star.style.setProperty('--swirl-delay',`${Math.random()*.14}s`);
+      starField.appendChild(star);
+    }
+    document.getElementById('enterPlanner').onclick=e=>{
+      const button=e.currentTarget;
+      const stage=document.getElementById('dropletStage');
+      button.classList.add('splashing');
+      introScreen.classList.add('leaving');
+      plannerPage.classList.remove('page-hidden');
+      plannerPage.classList.add('planner-arriving');
+      stage.querySelectorAll('.water-ring').forEach(ring=>ring.classList.add('animate'));
+      const directions=[[-72,-34],[-46,-54],[-12,-61],[30,-55],[67,-30],[74,12],[44,44],[-50,40]];
+      directions.forEach(([x,y],i)=>{
+        const drop=document.createElement('span');
+        drop.className='drop-particle';
+        drop.style.setProperty('--dx',`${x}px`);
+        drop.style.setProperty('--dy',`${y}px`);
+        drop.style.animationDelay=`${i%3*35}ms`;
+        stage.appendChild(drop);
+      });
+      setTimeout(()=>{
+        introScreen.classList.add('page-hidden');
+        introScreen.classList.remove('leaving');
+        plannerPage.classList.remove('planner-arriving');
+        button.classList.remove('splashing');
+        stage.querySelectorAll('.water-ring').forEach(ring=>ring.classList.remove('animate'));
+        stage.querySelectorAll('.drop-particle').forEach(drop=>drop.remove());
+        window.scrollTo({top:0,behavior:'smooth'});
+      },1240);
+    };
+    document.getElementById('showIntro').onclick=()=>{
+      plannerPage.classList.add('page-hidden');
+      introScreen.classList.remove('page-hidden');
+      window.scrollTo({top:0,behavior:'smooth'});
+    };
     document.getElementById('todayLabel').textContent = new Intl.DateTimeFormat('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'}).format(now);
     document.querySelectorAll('[data-view]').forEach(btn=>btn.onclick=()=>{
       document.querySelectorAll('[data-view]').forEach(b=>b.classList.remove('active')); btn.classList.add('active');
